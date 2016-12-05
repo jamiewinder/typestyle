@@ -148,11 +148,25 @@ export function reinit() {
 export const css = () => raw ? raw + freeStyle.getStyles() : freeStyle.getStyles();
 
 /**
+ * Takes a display name and CSSProperties and return a generated className you can use on your component
+ */
+export function style(displayName: string, ...objects: types.NestedCSSProperties[])
+
+/**
  * Takes CSSProperties and return a generated className you can use on your component
  */
-export function style(...objects: types.NestedCSSProperties[]) {
-  const object = extend(...objects);
-  const className = freeStyle.registerStyle(object);
+export function style(...objects: types.NestedCSSProperties[])
+export function style(...args: any[]) {
+  let className;
+  if (typeof args[0] === 'string') {
+    const displayName = args[0];
+    const objects = args.slice(1);
+    const object = extend(...objects);
+    className = freeStyle.registerStyle(object, displayName);
+  } else {
+    const object = extend(...args);
+    className = freeStyle.registerStyle(object);
+  }
   styleUpdated();
   return className;
 }
